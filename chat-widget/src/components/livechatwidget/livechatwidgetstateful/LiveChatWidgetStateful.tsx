@@ -144,6 +144,37 @@ export const LiveChatWidgetStateful = (props: ILiveChatWidgetProps) => {
         };
 
         let isChatValid = false;
+
+        if (props.deviceTransferData) {
+            console.log("[deviceTransferData][found]");
+            try {
+                const { deviceTransferData } = props;
+                const decodedDeviceTransferData = (window as any).atob(deviceTransferData); // eslint-disable-line @typescript-eslint/no-explicit-any
+                const liveChatContext = JSON.parse(decodedDeviceTransferData);
+
+                dispatch({ type: LiveChatWidgetActionType.SET_CONVERSATION_STATE, payload: ConversationState.Loading });
+
+                const currentRequestId = chatSDK.requestId ?? "";
+                chatSDK.requestId = liveChatContext.requestId;
+                const conversationDetails = await getConversationDetailsCall(chatSDK);
+
+                const conversationFound = Object.keys(conversationDetails).length > 0;
+                const conversationWithValidState = conversationDetails.state !== LiveWorkItemState.Closed && conversationDetails.state !== LiveWorkItemState.WrapUp;
+
+                if (conversationFound && conversationWithValidState) {
+                    optionalParams = { liveChatContext };
+                }
+
+                chatSDK.requestId = currentRequestId;
+
+                await initStartChat(chatSDK, dispatch, setAdapter, state, props, optionalParams);
+
+                return;
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
         //Start a chat from cache/reconnectid
         if (activeCachedChatExist === true) {
             dispatch({ type: LiveChatWidgetActionType.SET_CONVERSATION_STATE, payload: ConversationState.Loading });
