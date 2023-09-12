@@ -32,7 +32,7 @@ export const DeviceTransferQrPaneStateful = () => {
 
         const createQrUrl = (data: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
             const originURL = window.location.href;
-            const qrURL = `${originURL}?livechatcontext=${data}`;
+            const qrURL = `${originURL}?devicetransferdata=${data}`;
             return qrURL;
         };
 
@@ -88,12 +88,25 @@ export const DeviceTransferQrPaneStateful = () => {
         flexDirection: "column"
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const actionBarStyle: any = {
+        padding: "10px 0"
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const closeButtonStyle: any ={
+        width: "100%"
+    };
+
+
     return (
         <>
             <DimLayer brightness={"0.2"} />
             <div style={paneStyle}>
                 <img src={deviceTransferQr} alt="Device Transfer QR Code"/>
-                <button onClick={onClose}> Close </button>
+                <div style={actionBarStyle}>
+                    <button onClick={onClose} style={closeButtonStyle}> Close </button>
+                </div>
             </div>
         </>
     );
