@@ -1,20 +1,20 @@
 export enum LiveChatWidgetActionType {
     /*
         Parameters:
-        - true: When the minimize button is clicked 
+        - true: When the minimize button is clicked
         - false: When the chat button is clicked after the chat is minimized (not closed)
     */
     SET_WIDGET_ELEMENT_ID,
 
     /*
         Parameters:
-        - props: The rendering middleware props 
+        - props: The rendering middleware props
     */
     SET_RENDERING_MIDDLEWARE_PROPS,
 
     /*
         Parameters:
-        - props: The localized middlware texts 
+        - props: The localized middlware texts
     */
     SET_MIDDLEWARE_LOCALIZED_TEXTS,
 
@@ -26,7 +26,7 @@ export enum LiveChatWidgetActionType {
 
     /*
         Parameters:
-        - true: When the minimize button is clicked 
+        - true: When the minimize button is clicked
         - false: When the chat button is clicked after the chat is minimized (not closed)
     */
     SET_MINIMIZED,
@@ -99,7 +99,7 @@ export enum LiveChatWidgetActionType {
 
     /*
         Parameters:
-        true: If voice and video calling is enabled 
+        true: If voice and video calling is enabled
         false: Incase of disabled
     */
     SET_E2VV_ENABLED,
@@ -266,5 +266,7 @@ export enum LiveChatWidgetActionType {
     Parameters:
     ConfirmationState: Set confirmation state(OK/Cancel/NotSet)
     */
-    SET_CONFIRMATION_STATE
+    SET_CONFIRMATION_STATE,
+
+    SET_SHOW_DEVICE_TRANSFER_QR_PANE,
 }

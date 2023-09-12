@@ -363,6 +363,14 @@ export const createReducer = () => {
                     }
                 };
 
+            case LiveChatWidgetActionType.SET_SHOW_DEVICE_TRANSFER_QR_PANE:
+                return {
+                    ...state,
+                    uiStates: {
+                        ...state.uiStates,
+                        showDeviceTransferQrPane: action.payload as boolean
+                    }
+                };
             default:
                 return state;
         }
