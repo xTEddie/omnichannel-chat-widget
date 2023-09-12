@@ -58,9 +58,11 @@ export const DeviceTransferQrPaneStateful = () => {
             const liveChatContext = await chatSDK?.getCurrentLiveChatContext();
             let encodedData = encodeData(liveChatContext);
 
-            const encodedDataThreshold = 2000; // QRCode fails to be generated when chars length > ~3k
-            if (encodedData.length > encodedDataThreshold) {
-                encodedData = createAlternativeData(liveChatContext as LiveChatContext);
+            const useAlternativeData = true;
+            const encodedDataThreshold = 2000; // QRCode fails to be generated when chars length > ~2k
+            if (useAlternativeData || encodedData.length > encodedDataThreshold) {
+                const alternativeData = createAlternativeData(liveChatContext as LiveChatContext);
+                encodedData = encodeData(alternativeData);
             }
 
             const qrURL = createQrUrl(encodedData);
