@@ -66,4 +66,6 @@ export interface ILiveChatWidgetProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialCustomContext?: any;
     draggableChatWidgetProps?: IDraggableChatWidgetProps;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    deviceTransferData?: any;
 }
