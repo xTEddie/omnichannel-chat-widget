@@ -26,14 +26,8 @@ export const FooterStateful = (props: any) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const chatSDK: any = useChatSDKStore();
 
-    const onGenerateDeviceTransferQr = useCallback(async () => {
-        console.log("[onGenerateDeviceTransferQr]");
-        const liveChatContext = await chatSDK?.getCurrentLiveChatContext();
-        const data = JSON.stringify(liveChatContext);
-        const encodedData = (window as any).btoa(data); // eslint-disable-line @typescript-eslint/no-explicit-any
-        const originURL = window.location.href;
-        const qrURL = `${originURL}?livechatcontext=${encodedData}`;
-        console.log(qrURL);
+    const onDeviceTransferClick = useCallback(async () => {
+        dispatch({type: LiveChatWidgetActionType.SET_SHOW_DEVICE_TRANSFER_QR_PANE, payload: true});
     }, [chatSDK]);
 
     const controlProps: IFooterControlProps = {
@@ -75,7 +69,7 @@ export const FooterStateful = (props: any) => {
         rightGroup: {
             ...footerProps?.controlsProps.rightGroup,
             children: [
-                <IconButton key={0} iconProps={{iconName: "QRCode"}} onClick={onGenerateDeviceTransferQr}/>
+                <IconButton key={0} iconProps={{iconName: "QRCode"}} onClick={onDeviceTransferClick}/>
             ]
         }
     };

@@ -82,6 +82,7 @@ import { startProactiveChat } from "../common/startProactiveChat";
 import useChatAdapterStore from "../../../hooks/useChatAdapterStore";
 import useChatContextStore from "../../../hooks/useChatContextStore";
 import useChatSDKStore from "../../../hooks/useChatSDKStore";
+import DeviceTransferQrPaneStateful from "../../devicetransferqrpanestateful/DeviceTransferQrPaneStateful";
 
 export const LiveChatWidgetStateful = (props: ILiveChatWidgetProps) => {
     const [state, dispatch]: [ILiveChatWidgetContext, Dispatch<ILiveChatWidgetAction>] = useChatContextStore();
@@ -651,6 +652,8 @@ export const LiveChatWidgetStateful = (props: ILiveChatWidgetProps) => {
                         {createFooter(livechatProps, state)}
 
                         {shouldShowEmailTranscriptPane(state) && (decodeComponentString(livechatProps.componentOverrides?.emailTranscriptPane) || <EmailTranscriptPaneStateful {...livechatProps.emailTranscriptPane} />)}
+
+                        {state.uiStates.showDeviceTransferQrPane && <DeviceTransferQrPaneStateful/>}
                     </Stack>
                 </Composer>
             </DraggableChatWidget>
