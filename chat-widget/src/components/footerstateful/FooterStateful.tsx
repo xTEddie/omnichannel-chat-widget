@@ -1,6 +1,5 @@
 import { LogLevel, TelemetryEvent } from "../../common/telemetry/TelemetryConstants";
-import React, { Dispatch } from "react";
-
+import React, { Dispatch, useCallback } from "react";
 import AudioNotificationStateful from "./audionotificationstateful/AudioNotificationStateful";
 import { Constants } from "../../common/Constants";
 import { Footer } from "@microsoft/omnichannel-chat-components";
@@ -15,6 +14,7 @@ import { TelemetryHelper } from "../../common/telemetry/TelemetryHelper";
 import { downloadTranscript } from "./downloadtranscriptstateful/DownloadTranscriptStateful";
 import useChatContextStore from "../../hooks/useChatContextStore";
 import useChatSDKStore from "../../hooks/useChatSDKStore";
+import { IconButton } from "@fluentui/react";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const FooterStateful = (props: any) => {
@@ -25,6 +25,17 @@ export const FooterStateful = (props: any) => {
     const { footerProps, downloadTranscriptProps, audioNotificationProps, hideFooterDisplay } = props;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const chatSDK: any = useChatSDKStore();
+
+    const onGenerateDeviceTransferQr = useCallback(async () => {
+        console.log("[onGenerateDeviceTransferQr]");
+        const liveChatContext = await chatSDK?.getCurrentLiveChatContext();
+        const data = JSON.stringify(liveChatContext);
+        const encodedData = (window as any).btoa(data); // eslint-disable-line @typescript-eslint/no-explicit-any
+        const originURL = window.location.href;
+        const qrURL = `${originURL}?livechatcontext=${encodedData}`;
+        console.log(qrURL);
+    }, [chatSDK]);
+
     const controlProps: IFooterControlProps = {
         id: "oc-lcw-footer",
         dir: state.domainStates.globalDir,
@@ -61,6 +72,12 @@ export const FooterStateful = (props: any) => {
             ...footerProps?.controlProps?.audioNotificationButtonProps,
             isAudioMuted: state.appStates.isAudioMuted
         },
+        rightGroup: {
+            ...footerProps?.controlsProps.rightGroup,
+            children: [
+                <IconButton key={0} iconProps={{iconName: "QRCode"}} onClick={onGenerateDeviceTransferQr}/>
+            ]
+        }
     };
 
     return (
