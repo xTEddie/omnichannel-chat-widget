@@ -31,8 +31,9 @@ export const DeviceTransferQrPaneStateful = () => {
         };
 
         const createQrUrl = (data: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
-            const originURL = window.location.href;
-            const qrURL = `${originURL}?devicetransferdata=${data}`;
+            const url = new URL(window.location.href);
+            url.searchParams.append("devicetransferdata", data);
+            const qrURL = url.href;
             return qrURL;
         };
 
