@@ -13,6 +13,7 @@ import { version as chatSdkVersion } from "@microsoft/omnichannel-chat-sdk/packa
 import { version as chatWidgetVersion } from "../../package.json";
 import { getCustomizationJson } from "./getCustomizationJson";
 import { memoryDataStore } from "./Common/MemoryDataStore";
+import fetchDeviceTransferData from "./fetchDeviceTransferData";
 
 let liveChatWidgetProps;
 
@@ -48,6 +49,11 @@ const main = async () => {
                 OCChatSDKVersion: chatSdkVersion
             }
         };
+
+        const deviceTransferData = fetchDeviceTransferData();
+        if (deviceTransferData) {
+            liveChatWidgetProps = {...liveChatWidgetProps, deviceTransferData};
+        }
 
         ReactDOM.render(
             <LiveChatWidget {...liveChatWidgetProps} />,
