@@ -48,7 +48,7 @@ export const DeviceTransferQrPaneStateful = () => {
         };
 
         const retrieveQrCode = async (qrData: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
-            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}`;
             const response = await fetch(qrApiUrl);
             const blobResponse = await response.blob();
             const blobUrl = await readBlobAsDataURL(blobResponse);
