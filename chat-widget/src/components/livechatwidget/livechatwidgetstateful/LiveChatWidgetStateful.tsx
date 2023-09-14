@@ -83,6 +83,7 @@ import useChatAdapterStore from "../../../hooks/useChatAdapterStore";
 import useChatContextStore from "../../../hooks/useChatContextStore";
 import useChatSDKStore from "../../../hooks/useChatSDKStore";
 import DeviceTransferQrPaneStateful from "../../devicetransferqrpanestateful/DeviceTransferQrPaneStateful";
+import { getAuthClientFunction, handleAuthentication } from "../common/authHelper";
 
 export const LiveChatWidgetStateful = (props: ILiveChatWidgetProps) => {
     const [state, dispatch]: [ILiveChatWidgetContext, Dispatch<ILiveChatWidgetAction>] = useChatContextStore();
@@ -163,6 +164,21 @@ export const LiveChatWidgetStateful = (props: ILiveChatWidgetProps) => {
 
                 if (conversationFound && conversationWithValidState) {
                     optionalParams = { liveChatContext };
+                }
+
+                const authClientFunction = getAuthClientFunction(props?.chatConfig);
+                if (props?.getAuthToken && authClientFunction) {
+                    // set auth token to chat sdk before start chat
+                    const authSuccess = await handleAuthentication(chatSDK, props?.chatConfig, props?.getAuthToken);
+                    if (!authSuccess) {
+                        // Replacing with error ui
+                        throw new Error("Authentication was not successful");
+                    }
+                }
+
+                if (!liveChatContext.chatToken) {
+                    const chatToken = await chatSDK.getChatToken(false);
+                    optionalParams = { liveChatContext: {...liveChatContext, chatToken }};
                 }
 
                 chatSDK.requestId = currentRequestId;
