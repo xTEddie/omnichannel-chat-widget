@@ -98,11 +98,24 @@ const main = async () => {
         BroadcastService.postMessage(startProactiveChatEvent);
     };
 
+    const sendMessage = (content, tags) => {
+        const sendMessageEvent = {
+            eventName: "SendMessage",
+            payload: {
+                content,
+                tags
+            }
+        };
+
+        BroadcastService.postMessage(sendMessageEvent);
+    };
+
     window["switchConfig"] = switchConfig;
     window["startProactiveChat"] = startProactiveChat;
     window["startChat"] = startChat;
     window["endChat"] = endChat;
     window["setCustomContext"] = setCustomContext;
+    window["sendMessage"] = sendMessage;
     switchConfig(await getCustomizationJson());
 };
 
