@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { IStackStyles, Stack } from "@fluentui/react";
-import { LogLevel, TelemetryEvent } from "../../common/telemetry/TelemetryConstants";
+import { BroadcastEvent, LogLevel, TelemetryEvent } from "../../common/telemetry/TelemetryConstants";
 import React, { Dispatch, useEffect } from "react";
 import { BotMagicCodeStore } from "./webchatcontroller/BotMagicCodeStore";
 import { Components } from "botframework-webchat";
@@ -23,7 +23,8 @@ import { defaultSystemMessageBoxStyles } from "./webchatcontroller/middlewares/r
 import { defaultUserMessageBoxStyles } from "./webchatcontroller/middlewares/renderingmiddlewares/defaultStyles/defaultUserMessageBoxStyles";
 import { defaultWebChatContainerStatefulProps } from "./common/defaultProps/defaultWebChatContainerStatefulProps";
 import { setFocusOnSendBox } from "../../common/utils";
-import { useChatContextStore } from "../..";
+import { BroadcastService, useChatContextStore } from "../..";
+import { ICustomEvent } from "@microsoft/omnichannel-chat-components/lib/types/interfaces/ICustomEvent";
 
 const broadcastChannelMessageEvent = "message";
 const postActivity = (activity: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -136,6 +137,26 @@ export const WebChatContainerStateful = (props: ILiveChatWidgetProps) => {
         };
 
         magicCodeBroadcastChannel.addEventListener(broadcastChannelMessageEvent, eventListener);
+    }, []);
+
+    useEffect(() => {
+        BroadcastService.getMessageByEventName(BroadcastEvent.SendMessage).subscribe((msg: ICustomEvent) => {
+            const {payload} = msg;
+
+            if (payload.content) {
+                const activity: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+                activity.text = payload.content;
+
+                if (payload.tags) {
+                    activity.channelData = {
+                        tags: payload.tags
+                    };
+                }
+
+                const action = postActivity(activity);
+                WebChatStoreLoader.store.dispatch(action);
+            }
+        });
     }, []);
 
     return (
