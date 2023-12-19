@@ -110,6 +110,36 @@ const main = async () => {
         BroadcastService.postMessage(sendMessageEvent);
     };
 
+    const botAuthConfig = {
+        displaySignInCard: false
+    };
+
+    // Receives SAS URL
+    BroadcastService.getMessageByEventName("SignInCardReceived").subscribe((event) => {
+        const {payload} = event;
+        if (payload && payload.sasUrl) {
+            const {sasUrl} = payload;
+            console.log(sasUrl);
+
+            // #1: Post AuthToken to SAS URL
+
+            // #2: Update botAuthConfig hide/display sign-in card (hidden by default)
+            botAuthConfig.displaySignInCard = false;
+
+            // #3: Returns config to hide/display sign-in card
+            const listener = BroadcastService.getMessageByEventName("BotAuthConfigRequest").subscribe(() => {
+                BroadcastService.postMessage({
+                    eventName: "BotAuthConfigResponse",
+                    payload: {
+                        response: botAuthConfig.displaySignInCard
+                    }
+                });
+
+                listener.unsubscribe();
+            });
+        }
+    });
+
     window["switchConfig"] = switchConfig;
     window["startProactiveChat"] = startProactiveChat;
     window["startChat"] = startChat;
