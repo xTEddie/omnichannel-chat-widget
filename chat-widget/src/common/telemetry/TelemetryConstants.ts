@@ -23,7 +23,7 @@ export enum LogLevel {
 // Events used in certain functionalities that are not being logged
 export enum BroadcastEvent {
     LoadPostChatSurvey = "LoadPostChatSurvey",
-    ChatEnded = "ChatEnded", // used for multitab notification when chat ended 
+    ChatEnded = "ChatEnded", // used for multitab notification when chat ended
     NewMessageNotification = "NewMessageNotification",
     UnreadMessageCount = "UnreadMessageCount",
     StartProactiveChat = "StartProactiveChat",
@@ -56,7 +56,8 @@ export enum BroadcastEvent {
     HideChatVisibilityChangeEvent = "hideChatVisibilityChangeEvent",
     UpdateSessionDataForTelemetry = "UpdateSessionDataForTelemetry",
     UpdateConversationDataForTelemetry = "UpdateConversationDataForTelemetry",
-    ContactIdNotFound = "ContactIdNotFound"
+    ContactIdNotFound = "ContactIdNotFound",
+    SendMessage = "SendMessage"
 }
 
 // Events being logged
